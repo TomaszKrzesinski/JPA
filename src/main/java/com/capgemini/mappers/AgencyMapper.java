@@ -3,11 +3,13 @@ package com.capgemini.mappers;
 import com.capgemini.domain.Address;
 import com.capgemini.domain.AgencyEntity;
 import com.capgemini.types.AgencyTO;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Component
 public class AgencyMapper implements Mapper<AgencyEntity, AgencyTO> {
     @Override
     public AgencyTO mapToTO(AgencyEntity entity) {

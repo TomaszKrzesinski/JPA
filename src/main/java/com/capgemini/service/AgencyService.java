@@ -6,15 +6,19 @@ import com.capgemini.types.EmployeeTO;
 import java.util.List;
 
 public interface AgencyService {
+    AgencyTO getAgency(Long id);
+
+    List<AgencyTO> getAgencies();
+
     AgencyTO addAgency(AgencyTO agency);
 
     void removeAgency(Long id);
 
     AgencyTO updateAgency(AgencyTO agency);
 
-    EmployeeTO addEmployee(EmployeeTO employee);
+    EmployeeTO addEmployee(Long agencyId, Long employeeId);
 
-    void removeEmployee(Long id);
+    void removeEmployee(Long agencyId, Long employeeId);
 
     List<EmployeeTO> findAllAgencyEmployees(Long agencyID);
 

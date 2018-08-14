@@ -14,7 +14,7 @@ public class CarMapper implements Mapper<CarEntity, CarTO> {
 
     @Override
     public CarTO mapToTO(CarEntity entity) {
-        CarTO to = CarTO.builder()
+        return CarTO.builder()
                 .id(entity.getId())
                 .type(entity.getType())
                 .brand(entity.getBrand())
@@ -24,12 +24,12 @@ public class CarMapper implements Mapper<CarEntity, CarTO> {
                 .power(entity.getPower())
                 .productionYear(entity.getProductionYear())
                 .build();
-        return to;
+
     }
 
     @Override
     public CarEntity mapToEntity(CarTO to) {
-        CarEntity entity = CarEntity.builder()
+        return CarEntity.builder()
                 .id(to.getId())
                 .type(to.getType())
                 .brand(to.getBrand())
@@ -39,7 +39,6 @@ public class CarMapper implements Mapper<CarEntity, CarTO> {
                 .power(to.getPower())
                 .productionYear(to.getProductionYear())
                 .build();
-        return entity;
     }
 
     @Override
