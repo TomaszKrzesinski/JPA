@@ -22,6 +22,7 @@ public abstract class AbstractDao<T, K extends Serializable> implements Dao<T, K
     private Class<T> domainClass;
 
     @Override
+    @Transactional
     public T save(T entity) {
         entityManager.persist(entity);
         return entity;
@@ -47,16 +48,19 @@ public abstract class AbstractDao<T, K extends Serializable> implements Dao<T, K
     }
 
     @Override
+    @Transactional
     public T update(T entity) {
         return entityManager.merge(entity);
     }
 
     @Override
+    @Transactional
     public void delete(T entity) {
         entityManager.remove(entity);
     }
 
     @Override
+    @Transactional
     public void delete(K id) {
         entityManager.remove(getOne(id));
     }

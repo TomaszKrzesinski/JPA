@@ -1,11 +1,20 @@
 package com.capgemini.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "Agency")
+@Data
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class AgencyEntity {
     private static final long serialVersionUID = 1L;
 
@@ -17,53 +26,26 @@ public class AgencyEntity {
     private Address address;
 
     @OneToMany(mappedBy = "agency")
-    Set<EmployeeEntity> employees;
+    Set<EmployeeEntity> employees = new HashSet<>();
 
     @OneToMany(mappedBy = "agencyFrom")
-    Set<RentalEntity> rentalsFrom;
+    Set<RentalEntity> rentalsFrom = new HashSet<>();
 
     @OneToMany(mappedBy = "agencyTo")
-    Set<RentalEntity> rentalsTo;
-
-    public AgencyEntity() {
-    }
-
-    public AgencyEntity(Address address) {
-        this.address = address;
-        employees = new HashSet<>();
-        rentalsFrom = new HashSet<>();
-        rentalsFrom = new HashSet<>();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public Set<EmployeeEntity> getEmployees() {
-        return employees;
-    }
+    Set<RentalEntity> rentalsTo = new HashSet<>();
 
     public boolean addEmployee(EmployeeEntity employee) {
+        employee.setAgency(this);
         return employees.add(employee);
+
     }
 
     public boolean removeEmployee(EmployeeEntity employee) {
         return employees.remove(employee);
     }
 
-    public Set<RentalEntity> getRentalsFrom() {
-        return rentalsFrom;
-    }
-
     public boolean addRentalFrom(RentalEntity rental) {
+        rental.setAgencyFrom(this);
         return rentalsFrom.add(rental);
     }
 
@@ -71,16 +53,12 @@ public class AgencyEntity {
         return rentalsFrom.remove(rental);
     }
 
-    public Set<RentalEntity> getRentalsTo() {
-        return rentalsTo;
-    }
-
     public boolean addRentalTo(RentalEntity rental) {
+        rental.setAgencyTo(this);
         return rentalsTo.add(rental);
     }
 
     public boolean removeRentalTo(RentalEntity rental) {
         return rentalsTo.remove(rental);
     }
-
 }

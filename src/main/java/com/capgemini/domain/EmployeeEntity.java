@@ -1,5 +1,10 @@
 package com.capgemini.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -8,6 +13,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Employee")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmployeeEntity {
     private static final long serialVersionUID = 1L;
 
@@ -38,77 +47,10 @@ public class EmployeeEntity {
             joinColumns = { @JoinColumn(name = "car_id") },
             inverseJoinColumns = { @JoinColumn (name = "employee_id") }
     )
-    private Set<CarEntity> carsUnderKeep;
-
-    public EmployeeEntity() {
-    }
-
-    public EmployeeEntity(String firstName, String lastName, Address address, Date birthDate, RankEntity rank) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.birthDate = birthDate;
-        this.rank = rank;
-        carsUnderKeep = new HashSet<>();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public RankEntity getRank() {
-        return rank;
-    }
-
-    public void setRank(RankEntity rank) {
-        this.rank = rank;
-    }
-
-    public AgencyEntity getAgency() {
-        return agency;
-    }
-
-    public void setAgency(AgencyEntity agency) {
-        this.agency = agency;
-    }
-
-    public Set<CarEntity> getCarsUnderKeep() {
-        return carsUnderKeep;
-    }
+    private Set<CarEntity> carsUnderKeep = new HashSet<>();
 
     public boolean addCarUnderKeep(CarEntity car){
+        car.addKeeper(this);
         return carsUnderKeep.add(car);
     }
 

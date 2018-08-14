@@ -1,5 +1,10 @@
 package com.capgemini.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -7,6 +12,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Client")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClientEntity {
     private static final long serialVersionUID = 1L;
 
@@ -26,60 +35,17 @@ public class ClientEntity {
     Date birthDate;
 
     @OneToMany(mappedBy = "client")
-    private Set<RentalEntity> rentals;
-
-    public ClientEntity() {
-    }
+    private Set<RentalEntity> rentals = new HashSet<>();
 
     public ClientEntity(String firstName, String lastName, Address address, Date birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.birthDate = birthDate;
-        rentals = new HashSet<>();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public Set<RentalEntity> getRentals() {
-        return rentals;
     }
 
     public boolean addRental(RentalEntity rental) {
+        rental.setClient(this);
         return rentals.add(rental);
     }
 

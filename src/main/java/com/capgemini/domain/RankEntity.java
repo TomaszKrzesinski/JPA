@@ -1,11 +1,18 @@
 package com.capgemini.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "Rank")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RankEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,31 +22,7 @@ public class RankEntity {
     private String rank;
 
     @OneToMany(mappedBy = "rank")
-    Set<EmployeeEntity> employees;
-
-    public RankEntity() {
-    }
-
-    public RankEntity(String rank) {
-        this.rank = rank;
-        employees = new HashSet<>();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getRank() {
-        return rank;
-    }
-
-    public void setRank(String rank) {
-        this.rank = rank;
-    }
-
-    public Set<EmployeeEntity> getEmployees() {
-        return employees;
-    }
+    Set<EmployeeEntity> employees = new HashSet<>();
 
     public boolean addEmployee(EmployeeEntity employee) {
         return employees.add(employee);

@@ -1,5 +1,7 @@
 package com.capgemini.domain;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
@@ -7,6 +9,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Car")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CarEntity {
     private static final long serialVersionUID = 1L;
 
@@ -35,14 +41,11 @@ public class CarEntity {
     @Column(nullable = false, length = 7)
     private Integer millage;
 
-    @ManyToMany(mappedBy = "carsUnderKeep")
-    private Set<EmployeeEntity> keepers;
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "carsUnderKeep")
+    private Set<EmployeeEntity> keepers = new HashSet<>();
 
-    @OneToMany(mappedBy = "car")
-    private Set<RentalEntity> rentals;
-
-    public CarEntity() {
-    }
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "car")
+    private Set<RentalEntity> rentals = new HashSet<>();
 
     public CarEntity(String type, String brand, Integer productionYear, String colour, Double engineCapacity, Integer power, Integer millage) {
         this.type = type;
@@ -52,84 +55,15 @@ public class CarEntity {
         this.engineCapacity = engineCapacity;
         this.power = power;
         this.millage = millage;
-        keepers = new HashSet<>();
-        rentals = new HashSet<>();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public Integer getProductionYear() {
-        return productionYear;
-    }
-
-    public void setProductionYear(Integer productionYear) {
-        this.productionYear = productionYear;
-    }
-
-    public String getColour() {
-        return colour;
-    }
-
-    public void setColour(String colour) {
-        this.colour = colour;
-    }
-
-    public Double getEngineCapacity() {
-        return engineCapacity;
-    }
-
-    public void setEngineCapacity(Double engineCapacity) {
-        this.engineCapacity = engineCapacity;
-    }
-
-    public Integer getPower() {
-        return power;
-    }
-
-    public void setPower(Integer power) {
-        this.power = power;
-    }
-
-    public Integer getMillage() {
-        return millage;
-    }
-
-    public void setMillage(Integer millage) {
-        this.millage = millage;
-    }
-
-    public Set<EmployeeEntity> getKeepers() {
-        return keepers;
     }
 
     public boolean addKeeper(EmployeeEntity employee) {
+        employee.addCarUnderKeep(this);
         return keepers.add(employee);
     }
 
     public boolean removeKeeper(EmployeeEntity employee) {
         return keepers.remove(employee);
-    }
-
-    public Set<RentalEntity> getRentals() {
-        return rentals;
     }
 
     public boolean addCarRental(RentalEntity rental) {
