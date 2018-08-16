@@ -1,9 +1,6 @@
 package com.capgemini.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -11,7 +8,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Agency")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
@@ -36,7 +34,9 @@ public class AgencyEntity {
 
     public boolean addEmployee(EmployeeEntity employee) {
         employee.setAgency(this);
-        return employees.add(employee);
+        boolean result = employees.add(employee);
+
+        return result;
 
     }
 

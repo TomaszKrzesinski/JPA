@@ -5,16 +5,20 @@ import com.capgemini.domain.AgencyEntity;
 import com.capgemini.domain.EmployeeEntity;
 import com.capgemini.types.AgencyTO;
 import com.capgemini.types.EmployeeTO;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Component
 public class EmployeeMapper implements Mapper<EmployeeEntity, EmployeeTO> {
 
     @Override
     public EmployeeTO mapToTO(EmployeeEntity entity) {
         return EmployeeTO.builder()
+                .id(entity.getId())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
                 .address(Address.builder()
@@ -24,7 +28,7 @@ public class EmployeeMapper implements Mapper<EmployeeEntity, EmployeeTO> {
                         .country(entity.getAddress().getCountry())
                         .contactNumber(entity.getAddress().getContactNumber())
                         .build())
-                .agency(entity.getAgency())
+                .agencyID(entity.getAgency() != null ? entity.getAgency().getId() : null)
                 .birthDate(entity.getBirthDate())
                 .rank(entity.getRank())
                 .build();
@@ -33,6 +37,7 @@ public class EmployeeMapper implements Mapper<EmployeeEntity, EmployeeTO> {
     @Override
     public EmployeeEntity mapToEntity(EmployeeTO to) {
         return EmployeeEntity.builder()
+                .id(to.getId())
                 .firstName(to.getFirstName())
                 .lastName(to.getLastName())
                 .address(Address.builder()
@@ -42,7 +47,6 @@ public class EmployeeMapper implements Mapper<EmployeeEntity, EmployeeTO> {
                         .country(to.getAddress().getCountry())
                         .contactNumber(to.getAddress().getContactNumber())
                         .build())
-                .agency(to.getAgency())
                 .birthDate(to.getBirthDate())
                 .rank(to.getRank())
                 .build();
@@ -68,11 +72,19 @@ public class EmployeeMapper implements Mapper<EmployeeEntity, EmployeeTO> {
 
     @Override
     public Set<EmployeeTO> mapSetToTO(Set<EmployeeEntity> entitySet) {
-        return null;
+        Set<EmployeeTO> employeeTOSet = new HashSet<>();
+        for(EmployeeEntity entity : entitySet) {
+            employeeTOSet.add(mapToTO(entity));
+        }
+        return employeeTOSet;
     }
 
     @Override
     public Set<EmployeeEntity> mapSetToEntity(Set<EmployeeTO> toSet) {
-        return null;
+        Set<EmployeeEntity> employeeEntitySet = new HashSet<>();
+        for(EmployeeTO to : toSet) {
+            employeeEntitySet.add(mapToEntity(to));
+        }
+        return employeeEntitySet;
     }
 }

@@ -4,26 +4,28 @@ import com.capgemini.domain.Address;
 import com.capgemini.domain.AgencyEntity;
 import com.capgemini.domain.CarEntity;
 import com.capgemini.domain.RankEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"agencyID"})
 public class EmployeeTO {
     private Long id;
     private String firstName;
     private String lastName;
     private Address address;
     Date birthDate;
-    AgencyEntity agency;
+    Long agencyID;
+
+
     RankEntity rank;
 }

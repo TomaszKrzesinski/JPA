@@ -6,6 +6,7 @@ import com.capgemini.types.AgencyTO;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -59,11 +60,19 @@ public class AgencyMapper implements Mapper<AgencyEntity, AgencyTO> {
 
     @Override
     public Set<AgencyTO> mapSetToTO(Set<AgencyEntity> entitySet) {
-        return null;
+        Set<AgencyTO> agencyToSet = new HashSet<>();
+        for(AgencyEntity entity : entitySet) {
+            agencyToSet.add(mapToTO(entity));
+        }
+        return agencyToSet;
     }
 
     @Override
     public Set<AgencyEntity> mapSetToEntity(Set<AgencyTO> toSet) {
-        return null;
+        Set<AgencyEntity> agencyEntitySet = new HashSet<>();
+        for(AgencyTO to : toSet) {
+            agencyEntitySet.add(mapToEntity(to));
+        }
+        return agencyEntitySet;
     }
 }

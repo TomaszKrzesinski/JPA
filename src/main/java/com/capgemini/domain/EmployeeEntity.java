@@ -1,9 +1,6 @@
 package com.capgemini.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,7 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Employee")
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,7 +39,7 @@ public class EmployeeEntity {
     @ManyToOne
     RankEntity rank;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "car_keeper",
             joinColumns = { @JoinColumn(name = "car_id") },
@@ -50,11 +48,12 @@ public class EmployeeEntity {
     private Set<CarEntity> carsUnderKeep = new HashSet<>();
 
     public boolean addCarUnderKeep(CarEntity car){
-        car.addKeeper(this);
         return carsUnderKeep.add(car);
     }
 
     public boolean removeCarUnderKeep(CarEntity car) {
         return carsUnderKeep.remove(car);
     }
+
+
 }

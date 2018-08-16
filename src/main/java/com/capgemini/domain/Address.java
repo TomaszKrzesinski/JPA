@@ -1,14 +1,13 @@
 package com.capgemini.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Embeddable
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,4 +29,20 @@ public class Address {
     @Column(name = "contact_number", nullable = false)
     private Long contactNumber;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(street, address.street) &&
+                Objects.equals(city, address.city) &&
+                Objects.equals(postalCode, address.postalCode) &&
+                Objects.equals(country, address.country) &&
+                Objects.equals(contactNumber, address.contactNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(street, city, postalCode, country, contactNumber);
+    }
 }

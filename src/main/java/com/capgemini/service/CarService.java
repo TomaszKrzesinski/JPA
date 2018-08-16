@@ -3,6 +3,7 @@ package com.capgemini.service;
 import com.capgemini.types.CarTO;
 
 import java.util.List;
+import java.util.Set;
 
 public interface CarService {
 	CarTO getCarByID(Long id);
@@ -15,9 +16,9 @@ public interface CarService {
 
 	CarTO updateCar(CarTO car);
 
-	CarTO setKeeper(Long carID, Long employeeID);
+	CarTO assignKeeper(Long carID, Long employeeID);
 
-	List<CarTO> findCarsByKeeper(Long keeperId);
+	Set<CarTO> findCarsByKeeper(Long keeperId);
 
 	List<CarTO> findCarsByTypeAndBrand(String type, String brand);
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -61,11 +62,19 @@ public class CarMapper implements Mapper<CarEntity, CarTO> {
 
     @Override
     public Set<CarTO> mapSetToTO(Set<CarEntity> entitySet) {
-        return null;
+        Set<CarTO> carToSet = new HashSet<>();
+        for(CarEntity entity : entitySet) {
+            carToSet.add(mapToTO(entity));
+        }
+        return carToSet;
     }
 
     @Override
     public Set<CarEntity> mapSetToEntity(Set<CarTO> toSet) {
-        return null;
+        Set<CarEntity> carEntitySet = new HashSet<>();
+        for(CarTO to : toSet) {
+            carEntitySet.add(mapToEntity(to));
+        }
+        return carEntitySet;
     }
 }
