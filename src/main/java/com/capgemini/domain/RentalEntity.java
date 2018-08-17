@@ -1,6 +1,8 @@
 package com.capgemini.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -29,6 +31,14 @@ public class RentalEntity {
 
     @Column(name = "date_to")
     Date dateTo;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modifyDate;
 
     @ManyToOne
     AgencyEntity agencyFrom;

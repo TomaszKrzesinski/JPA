@@ -1,7 +1,7 @@
 package com.capgemini.service;
 
-import com.capgemini.dao.CarDao;
-import com.capgemini.domain.Address;
+import com.capgemini.dao.*;
+import com.capgemini.domain.CarEntity;
 import com.capgemini.types.CarTO;
 import com.capgemini.types.EmployeeTO;
 import org.junit.Assert;
@@ -12,13 +12,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(properties="spring.profiles.active=hsql")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CarServiceTest {
     @Autowired
@@ -27,6 +26,15 @@ public class CarServiceTest {
     EmployeeService employeeService;
     @Autowired
     TestTO testTo;
+    @Autowired
+    CarDao carDao;
+    @Autowired
+    AgencyDao agencyDao;
+    @Autowired
+    ClientDao customerDao;
+
+    @Autowired
+    RentalDao rentalDao;
 
     @Test
     public void shouldAddCarAndReturnWithID() {
@@ -195,5 +203,32 @@ public class CarServiceTest {
         Assert.assertEquals((Integer)1, (Integer)listOfCars3.size());
         Assert.assertEquals((Integer)1, (Integer)listOfCars4.size());
         Assert.assertEquals((Integer)0, (Integer)listOfCars5.size());
+    }
+
+    @Test
+    public void shouldRemoveRentalsAfterRemovingCar() {
+        //given
+        CarEntity car = CarEntity.builder()
+                .type("Sedan")
+                .brand("Mazda")
+                .colour("Yellow")
+                .engineCapacity(1.8)
+                .power(100)
+                .millage(100000)
+                .productionYear(2000)
+                .build();
+
+        CarEntity savedCar1 = carDao.save(car);
+
+
+
+
+
+
+        //when
+
+
+
+
     }
 }

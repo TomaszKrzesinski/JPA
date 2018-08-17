@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(properties="spring.profiles.active=hsql")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AgencyServiceTest {
     @Autowired
@@ -28,6 +28,9 @@ public class AgencyServiceTest {
 
     @Autowired
     EmployeeService employeeService;
+
+    @Autowired
+    CarService carService;
 
     @Autowired
     TestTO testTo;
@@ -184,6 +187,57 @@ public class AgencyServiceTest {
         Assert.assertTrue(assignedEmployees2.contains(savedEmployee4));
     }
 
+    @Test
+    public void shouldFindAllEmployeesFromAgencyCaringAboutCar() {
+        EmployeeTO employee1 = testTo.getEmployee();
+        EmployeeTO employee2 = testTo.getEmployee();
+        EmployeeTO employee3 = testTo.getEmployee();
+        EmployeeTO employee4 = testTo.getEmployee();
+        EmployeeTO employee5 = testTo.getEmployee();
 
+        AgencyTO agency1 = testTo.getAgency();
+        AgencyTO agency2 = testTo.getAgency();
+
+        CarTO car1 = testTo.getCar();
+        CarTO car2 = testTo.getCar();
+
+        EmployeeTO savedEmployee1 = employeeService.addEmployee(employee1);
+        EmployeeTO savedEmployee2 = employeeService.addEmployee(employee2);
+        EmployeeTO savedEmployee3 = employeeService.addEmployee(employee3);
+        EmployeeTO savedEmployee4 = employeeService.addEmployee(employee4);
+        EmployeeTO savedEmployee5 = employeeService.addEmployee(employee5);
+
+        AgencyTO savedAgency1 = agencyService.addAgency(agency1);
+        AgencyTO savedAgency2 = agencyService.addAgency(agency2);
+
+        CarTO savedCar1 = carService.addCar(car1);
+        CarTO savedCar2 = carService.addCar(car2);
+
+        agencyService.assignEmployee(savedAgency1.getId(), savedEmployee1.getId());
+        agencyService.assignEmployee(savedAgency1.getId(), savedEmployee2.getId());
+        agencyService.assignEmployee(savedAgency1.getId(), savedEmployee3.getId());
+        agencyService.assignEmployee(savedAgency2.getId(), savedEmployee4.getId());
+        agencyService.assignEmployee(savedAgency2.getId(), savedEmployee5.getId());
+
+        carService.assignKeeper(savedCar1.getId(), savedEmployee1.getId());
+        carService.assignKeeper(savedCar1.getId(), savedEmployee2.getId());
+        carService.assignKeeper(savedCar2.getId(), savedEmployee3.getId());
+        carService.assignKeeper(savedCar2.getId(), savedEmployee4.getId());
+        carService.assignKeeper(savedCar2.getId(), savedEmployee5.getId());
+
+        List<EmployeeTO> employees_1_1 =
+                agencyService.findAllAgencyEmployeesKeepingCar(savedAgency1.getId(), savedCar1.getId());
+        List<EmployeeTO> employees_1_2 =
+                agencyService.findAllAgencyEmployeesKeepingCar(savedAgency1.getId(), savedCar2.getId());
+        List<EmployeeTO> employees_2_1 =
+                agencyService.findAllAgencyEmployeesKeepingCar(savedAgency2.getId(), savedCar1.getId());
+        List<EmployeeTO> employees_2_2 =
+                agencyService.findAllAgencyEmployeesKeepingCar(savedAgency2.getId(), savedCar2.getId());
+        //then
+        Assert.assertEquals((Integer)2, (Integer)employees_1_1.size());
+        Assert.assertEquals((Integer)1, (Integer)employees_1_2.size());
+        Assert.assertEquals((Integer)0, (Integer)employees_2_1.size());
+        Assert.assertEquals((Integer)2, (Integer)employees_2_2.size());
+    }
 
 }

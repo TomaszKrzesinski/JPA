@@ -7,6 +7,7 @@ import com.capgemini.domain.EmployeeEntity;
 import com.capgemini.mappers.Mapper;
 import com.capgemini.service.EmployeeService;
 import com.capgemini.types.CarTO;
+import com.capgemini.types.EmployeeSearchCriteria;
 import com.capgemini.types.EmployeeTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeTO> getEmployees() {
         return employeeMapper.mapListToTO(employeeDao.findAll());
+    }
+
+    @Override
+    public List<EmployeeTO> searchEmployee(EmployeeSearchCriteria employeeSearchCriteria) {
+        return employeeMapper.mapListToTO(employeeDao.searchEmployee(employeeSearchCriteria));
     }
 }

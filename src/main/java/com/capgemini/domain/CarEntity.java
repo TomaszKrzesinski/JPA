@@ -1,14 +1,13 @@
 package com.capgemini.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "Car")
@@ -50,10 +49,18 @@ public class CarEntity {
     @Column(nullable = false, length = 7)
     private Integer millage;
 
-    @ManyToMany(cascade = CascadeType.REMOVE, mappedBy = "carsUnderKeep")
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modifyDate;
+
+    @ManyToMany(mappedBy = "carsUnderKeep")
     private Set<EmployeeEntity> keepers = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "car")
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "car")
     private Set<RentalEntity> rentals = new HashSet<>();
 
     public CarEntity(String type, String brand, Integer productionYear, String colour, Double engineCapacity, Integer power, Integer millage) {

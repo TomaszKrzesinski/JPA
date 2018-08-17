@@ -1,6 +1,8 @@
 package com.capgemini.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -31,6 +33,14 @@ public class ClientEntity {
 
     @Column(name = "birth_date", nullable = false)
     Date birthDate;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modifyDate;
 
     @OneToMany(mappedBy = "client")
     private Set<RentalEntity> rentals = new HashSet<>();

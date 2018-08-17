@@ -1,10 +1,9 @@
 package com.capgemini.dao.impl;
 
 import com.capgemini.dao.AgencyDao;
-import com.capgemini.dao.CarDao;
 import com.capgemini.domain.AgencyEntity;
 import com.capgemini.domain.CarEntity;
-import com.capgemini.types.EmployeeTO;
+import com.capgemini.domain.EmployeeEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
@@ -14,14 +13,16 @@ import java.util.List;
 public class AgencyDaoImpl extends AbstractDao<AgencyEntity, Long> implements AgencyDao {
 
     @Override
-    public List<EmployeeTO> findAllAgencyEmployeesKeepingCar(Long agencyID, Long carID) {
-        TypedQuery<CarEntity> query = entityManager.createQuery(
+    public List<EmployeeEntity> findAllAgencyEmployeesKeepingCar(Long agencyID, Long carID) {
+        TypedQuery<EmployeeEntity> query = entityManager.createQuery(
                 "SELECT e " +
                         "FROM EmployeeEntity e " +
-                        "INNER JOIN " +
-                        "AND UPPER(c.brand) LIKE CONCAT('%', UPPER(:brand), '%')", CarEntity.class);
-        query.setParameter("type", type);
-        query.setParameter("brand", brand);
+                        "JOIN e.carsUnderKeep cars " +
+                        "where cars.id = :carID AND e.agency.id = :agencyID",
+                EmployeeEntity.class);
+        query.setParameter("carID", carID);
+        query.setParameter("agencyID", agencyID);
+        return query.getResultList();
     }
 
 

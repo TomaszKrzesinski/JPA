@@ -1,8 +1,11 @@
 package com.capgemini.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +25,14 @@ public class AgencyEntity {
 
     @Embedded
     private Address address;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modifyDate;
 
     @OneToMany(mappedBy = "agency")
     Set<EmployeeEntity> employees = new HashSet<>();
