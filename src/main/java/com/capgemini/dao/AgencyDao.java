@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface AgencyDao extends Dao<AgencyEntity, Long> {
     List<EmployeeEntity> findAllAgencyEmployeesKeepingCar(Long agencyID, Long carID);
+
+    Integer getRentalsFromCount(Long agencyID);
+    Integer getRentalsToCount(Long agencyID);
 }

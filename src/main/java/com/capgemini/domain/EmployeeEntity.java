@@ -57,6 +57,9 @@ public class EmployeeEntity {
     )
     private Set<CarEntity> carsUnderKeep = new HashSet<>();
 
+    @Version
+    private Long version;
+
     public boolean addCarUnderKeep(CarEntity car){
         return carsUnderKeep.add(car);
     }

@@ -35,6 +35,9 @@ public class RankEntity {
     @OneToMany(mappedBy = "rank")
     Set<EmployeeEntity> employees = new HashSet<>();
 
+    @Version
+    private Long version;
+
     public boolean addEmployee(EmployeeEntity employee) {
         return employees.add(employee);
     }

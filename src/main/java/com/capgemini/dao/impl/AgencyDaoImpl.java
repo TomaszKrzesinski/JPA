@@ -25,6 +25,18 @@ public class AgencyDaoImpl extends AbstractDao<AgencyEntity, Long> implements Ag
         return query.getResultList();
     }
 
+    @Override
+    public Integer getRentalsFromCount(Long agencyID) {
+        AgencyEntity agency = findOne(agencyID);
+        return agency.getRentalsFrom().size();
+    }
+
+    @Override
+    public Integer getRentalsToCount(Long agencyID) {
+        AgencyEntity agency = findOne(agencyID);
+        return agency.getRentalsTo().size();
+    }
+
 
     public List<CarEntity> findCarsByTypeAndBrand(String type, String brand) {
         TypedQuery<CarEntity> query = entityManager.createQuery("SELECT c FROM CarEntity c WHERE UPPER(c.type) LIKE CONCAT('%', UPPER(:type), '%') " +

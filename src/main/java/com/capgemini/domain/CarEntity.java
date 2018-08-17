@@ -16,11 +16,6 @@ import java.util.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-//@NamedQueries({
-//        @NamedQuery(name="CarEntity.findCarByTypeAndBrand",
-//                query="SELECT * FROM car c WHERE UPPER(c.type) LIKE CONCAT('%', UPPER(:type), '%') " +
-//                        "AND UPPER(c.brand) LIKE CONCAT('%', UPPER(:brand), '%')")
-//})
 public class CarEntity {
     private static final long serialVersionUID = 1L;
 
@@ -60,8 +55,11 @@ public class CarEntity {
     @ManyToMany(mappedBy = "carsUnderKeep")
     private Set<EmployeeEntity> keepers = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "car")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "car")
     private Set<RentalEntity> rentals = new HashSet<>();
+
+    @Version
+    private Long version;
 
     public CarEntity(String type, String brand, Integer productionYear, String colour, Double engineCapacity, Integer power, Integer millage) {
         this.type = type;
@@ -90,7 +88,18 @@ public class CarEntity {
         return rentals.remove(rental);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CarEntity entity = (CarEntity) o;
+        return Objects.equals(id, entity.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
 
 

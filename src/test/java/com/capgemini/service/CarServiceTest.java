@@ -1,7 +1,7 @@
 package com.capgemini.service;
 
 import com.capgemini.dao.*;
-import com.capgemini.domain.CarEntity;
+import com.capgemini.domain.*;
 import com.capgemini.types.CarTO;
 import com.capgemini.types.EmployeeTO;
 import org.junit.Assert;
@@ -12,6 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Date;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +34,7 @@ public class CarServiceTest {
     @Autowired
     AgencyDao agencyDao;
     @Autowired
-    ClientDao customerDao;
+    ClientDao clientDao;
 
     @Autowired
     RentalDao rentalDao;
@@ -217,18 +220,62 @@ public class CarServiceTest {
                 .millage(100000)
                 .productionYear(2000)
                 .build();
+        CarEntity savedCar = carDao.save(car);
 
-        CarEntity savedCar1 = carDao.save(car);
+        AgencyEntity agency = AgencyEntity.builder()
+                .address(Address.builder()
+                        .contactNumber(5555555L)
+                        .postalCode("55-555")
+                        .country("Poland")
+                        .city("Poznan")
+                        .street("Sezamkowa 5").build())
+                .build();
+        AgencyEntity savedAgency = agencyDao.save(agency);
 
+        ClientEntity client = ClientEntity.builder()
+                .address(Address.builder()
+                        .contactNumber(5555555L)
+                        .postalCode("55-555")
+                        .country("Poland")
+                        .city("Poznan")
+                        .street("Sezamkowa 5").build())
+                .birthDate(Date.valueOf("1986-05-03"))
+                .firstName("Tomasz")
+                .lastName("Krzesinski")
+                .build();
+        ClientEntity savedClient = clientDao.save(client);
 
+        RentalEntity rentalEntity = RentalEntity.builder()
+                .agencyFrom(savedAgency)
+                .agencyTo(savedAgency)
+                .car(savedCar)
+                .client(savedClient)
+                .cost(100.00)
+                .dateFrom(Date.from(Instant.now()))
+                .dateTo(Date.from(Instant.now()))
+                .build();
+        RentalEntity savedRental = rentalDao.save(rentalEntity);
 
+        Assert.assertNotNull(carDao.findOne(savedCar.getId()));
+        Assert.assertNotNull(agencyDao.findOne(savedAgency.getId()));
+        Assert.assertNotNull(clientDao.findOne(savedClient.getId()));
+        Assert.assertNotNull(rentalDao.findOne(savedRental.getId()));
 
-
-
+        Assert.assertEquals((Integer)1, (Integer)carDao.getRentalsCount(savedCar.getId()));
+        Assert.assertEquals((Integer)1, (Integer)agencyDao.getRentalsFromCount(savedAgency.getId()));
+        Assert.assertEquals((Integer)1, (Integer)agencyDao.getRentalsToCount(savedAgency.getId()));
+        Assert.assertEquals((Integer)1, (Integer)clientDao.getRentalsCount(savedClient.getId()));
+        Assert.assertEquals(savedCar.getId(), rentalDao.findOne(savedRental.getId()).getCar().getId());
+        Assert.assertEquals(savedAgency.getId(), rentalDao.findOne(savedRental.getId()).getAgencyFrom().getId());
+        Assert.assertEquals(savedAgency.getId(), rentalDao.findOne(savedRental.getId()).getAgencyTo().getId());
+        Assert.assertEquals(savedClient.getId(), rentalDao.findOne(savedRental.getId()).getClient().getId());
         //when
-
-
-
-
+        carDao.delete(savedCar.getId());
+        //then
+        Assert.assertNull(carDao.findOne(savedCar.getId()));
+        Assert.assertNull(rentalDao.findOne(savedRental.getId()));
+        Assert.assertEquals((Integer)0, (Integer)agencyDao.getRentalsFromCount(savedAgency.getId()));
+        Assert.assertEquals((Integer)0, (Integer)agencyDao.getRentalsToCount(savedAgency.getId()));
+        Assert.assertEquals((Integer)0, (Integer)clientDao.getRentalsCount(savedClient.getId()));
     }
 }

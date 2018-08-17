@@ -45,6 +45,9 @@ public class ClientEntity {
     @OneToMany(mappedBy = "client")
     private Set<RentalEntity> rentals = new HashSet<>();
 
+    @Version
+    private Long version;
+
     public ClientEntity(String firstName, String lastName, Address address, Date birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;

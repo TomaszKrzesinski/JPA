@@ -12,5 +12,7 @@ public interface CarDao extends Dao<CarEntity, Long> {
     List<CarEntity> findCarsByKeeper();
 
     List<CarEntity> findCarsByTypeAndBrand(String type, String brand);
+
+    Integer getRentalsCount(Long carID);
 }
 

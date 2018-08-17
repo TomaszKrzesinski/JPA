@@ -15,7 +15,6 @@ import com.capgemini.dao.Dao;
 
 @Transactional(Transactional.TxType.SUPPORTS)
 public abstract class AbstractDao<T, K extends Serializable> implements Dao<T, K> {
-
     @PersistenceContext
     protected EntityManager entityManager;
 
@@ -28,16 +27,19 @@ public abstract class AbstractDao<T, K extends Serializable> implements Dao<T, K
         return entity;
     }
 
+    @Transactional
     @Override
     public T getOne(K id) {
         return entityManager.getReference(getDomainClass(), id);
     }
 
+    @Transactional
     @Override
     public T findOne(K id) {
         return entityManager.find(getDomainClass(), id);
     }
 
+    @Transactional
     @Override
     public List<T> findAll() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();

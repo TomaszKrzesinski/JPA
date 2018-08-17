@@ -43,6 +43,9 @@ public class AgencyEntity {
     @OneToMany(mappedBy = "agencyTo")
     Set<RentalEntity> rentalsTo = new HashSet<>();
 
+    @Version
+    private Long version;
+
     public boolean addEmployee(EmployeeEntity employee) {
         employee.setAgency(this);
         boolean result = employees.add(employee);
