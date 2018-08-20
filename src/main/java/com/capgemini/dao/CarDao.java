@@ -1,9 +1,8 @@
 package com.capgemini.dao;
 
 import com.capgemini.domain.CarEntity;
-import com.capgemini.types.CarTO;
-import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 public interface CarDao extends Dao<CarEntity, Long> {
@@ -17,5 +16,6 @@ public interface CarDao extends Dao<CarEntity, Long> {
 
     List<CarEntity> findCarsRentedToDistinctClientsMoreThan(Long distinctClientsNumber);
 
+    Long countCarsRentedBetweenTimePeriod(Date searchDateFrom, Date searchDateTo);
 }
 

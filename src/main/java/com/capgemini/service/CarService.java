@@ -2,6 +2,7 @@ package com.capgemini.service;
 
 import com.capgemini.types.CarTO;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -22,4 +23,5 @@ public interface CarService {
 
 	List<CarTO> findCarsByTypeAndBrand(String type, String brand);
 
+	Long countCarsRentedBetweenTimePeriod(Date searchDateFrom, Date searchDateTo);
 }

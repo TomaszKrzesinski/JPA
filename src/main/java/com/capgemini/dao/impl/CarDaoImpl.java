@@ -1,16 +1,12 @@
 package com.capgemini.dao.impl;
 
 import com.capgemini.dao.CarDao;
-import com.capgemini.domain.AgencyEntity;
 import com.capgemini.domain.CarEntity;
-import com.capgemini.domain.EmployeeEntity;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -61,6 +57,21 @@ public class CarDaoImpl extends AbstractDao<CarEntity, Long> implements CarDao {
             .getResultList();
 
         return resultList;
+    }
+
+    @Override
+    public Long countCarsRentedBetweenTimePeriod(Date searchDateFrom, Date searchDateTo) {
+        String query = "SELECT COUNT(distinct crs.id) " +
+                "FROM CarEntity crs " +
+                "LEFT JOIN crs.rentals rnt " +
+                "where rnt.dateFrom <= :searchDateTo AND rnt.dateTo >= :searchDateFrom";
+
+        Long count = entityManager.createQuery(query, Long.class)
+                .setParameter("searchDateTo", searchDateTo)
+                .setParameter("searchDateFrom", searchDateFrom)
+                .getSingleResult();
+
+        return count;
     }
 }
 

@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Date;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -374,15 +373,51 @@ public class CarServiceTest {
         CarEntity savedCar4 = carDao.save(car4);
         CarEntity car5 = testTo.getCarEntity();
         CarEntity savedCar5 = carDao.save(car5);
+        CarEntity car6 = testTo.getCarEntity();
+        CarEntity savedCar6 = carDao.save(car6);
+        CarEntity car7 = testTo.getCarEntity();
+        CarEntity savedCar7 = carDao.save(car7);
+
 
         AgencyEntity agency = testTo.getAgencyEntity();
         AgencyEntity savedAgency = agencyDao.save(agency);
 
-        RentalEntity rentalEntity1 = testTo.getRentalEntity(savedAgency, savedCar1, savedClient1);
-        RentalEntity rentalEntity2 = testTo.getRentalEntity(savedAgency, savedCar2, savedClient2);
-        RentalEntity rentalEntity3 = testTo.getRentalEntity(savedAgency, savedCar3, savedClient3);
-        RentalEntity rentalEntity4 = testTo.getRentalEntity(savedAgency, savedCar4, savedClient4);
-        RentalEntity rentalEntity5 = testTo.getRentalEntity(savedAgency, savedCar5, savedClient5);
+        ClientEntity client = testTo.getClientEntity();
+        ClientEntity savedClient = clientDao.save(client);
 
+        RentalEntity rentalEntity1 = testTo.getRentalEntity(savedAgency, savedCar1, savedClient);
+        rentalEntity1.setDateFrom(Date.valueOf("2018-05-01"));
+        rentalEntity1.setDateTo(Date.valueOf("2018-05-31"));
+        RentalEntity rentalEntity2 = testTo.getRentalEntity(savedAgency, savedCar2, savedClient);
+        rentalEntity2.setDateFrom(Date.valueOf("2018-04-15"));
+        rentalEntity2.setDateTo(Date.valueOf("2018-05-15"));
+        RentalEntity rentalEntity3 = testTo.getRentalEntity(savedAgency, savedCar3, savedClient);
+        rentalEntity3.setDateFrom(Date.valueOf("2018-05-15"));
+        rentalEntity3.setDateTo(Date.valueOf("2018-06-15"));
+        RentalEntity rentalEntity4 = testTo.getRentalEntity(savedAgency, savedCar4, savedClient);
+        rentalEntity4.setDateFrom(Date.valueOf("2018-04-01"));
+        rentalEntity4.setDateTo(Date.valueOf("2018-06-20"));
+        RentalEntity rentalEntity5 = testTo.getRentalEntity(savedAgency, savedCar5, savedClient);
+        rentalEntity5.setDateFrom(Date.valueOf("2018-05-10"));
+        rentalEntity5.setDateTo(Date.valueOf("2018-05-12"));
+        RentalEntity rentalEntity6 = testTo.getRentalEntity(savedAgency, savedCar6, savedClient);
+        rentalEntity6.setDateFrom(Date.valueOf("2018-04-10"));
+        rentalEntity6.setDateTo(Date.valueOf("2018-04-12"));
+        RentalEntity rentalEntity7 = testTo.getRentalEntity(savedAgency, savedCar7, savedClient);
+        rentalEntity7.setDateFrom(Date.valueOf("2018-06-10"));
+        rentalEntity7.setDateTo(Date.valueOf("2018-06-12"));
+
+        rentalDao.save(rentalEntity1);
+        rentalDao.save(rentalEntity2);
+        rentalDao.save(rentalEntity3);
+        rentalDao.save(rentalEntity4);
+        rentalDao.save(rentalEntity5);
+        rentalDao.save(rentalEntity6);
+        rentalDao.save(rentalEntity7);
+
+        Date searchDateFrom = Date.valueOf("2018-05-01");
+        Date searchDateTo = Date.valueOf("2018-05-31");
+        Long counter = carService.countCarsRentedBetweenTimePeriod(searchDateFrom,searchDateTo);
+        Assert.assertEquals((Long)5L, counter);
     }
 }

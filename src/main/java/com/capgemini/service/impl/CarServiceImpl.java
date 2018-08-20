@@ -6,13 +6,12 @@ import com.capgemini.domain.CarEntity;
 import com.capgemini.domain.EmployeeEntity;
 import com.capgemini.mappers.Mapper;
 import com.capgemini.service.CarService;
-import com.capgemini.service.EmployeeService;
 import com.capgemini.types.CarTO;
-import com.capgemini.types.EmployeeTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -79,6 +78,11 @@ public class CarServiceImpl implements CarService {
     @Override
     public List<CarTO> findCarsByTypeAndBrand(String type, String brand) {
         return carMapper.mapListToTO(carDao.findCarsByTypeAndBrand(type,brand));
+    }
+
+    @Override
+    public Long countCarsRentedBetweenTimePeriod(Date searchDateFrom, Date searchDateTo) {
+        return carDao.countCarsRentedBetweenTimePeriod(searchDateFrom, searchDateTo);
     }
 
     private void updateEntity(CarEntity entity, CarTO carTO) {

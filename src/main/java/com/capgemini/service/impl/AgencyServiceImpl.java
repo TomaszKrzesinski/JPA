@@ -2,6 +2,7 @@ package com.capgemini.service.impl;
 
 import com.capgemini.dao.AgencyDao;
 import com.capgemini.dao.EmployeeDao;
+import com.capgemini.domain.Address;
 import com.capgemini.domain.AgencyEntity;
 import com.capgemini.domain.EmployeeEntity;
 import com.capgemini.mappers.Mapper;
@@ -56,7 +57,9 @@ public class AgencyServiceImpl implements AgencyService {
 
     @Override
     public AgencyTO updateAgency(AgencyTO agency) {
-        return agencyMapper.mapToTO(agencyDao.update(agencyMapper.mapToEntity(agency)));
+        AgencyEntity agencyEntity = agencyDao.findOne(agency.getId());
+        updateAgency(agencyEntity,agency);
+        return agencyMapper.mapToTO(agencyEntity);
     }
 
     @Override
@@ -94,5 +97,13 @@ public class AgencyServiceImpl implements AgencyService {
         return employeeMapper.mapListToTO(agencyDao.findAllAgencyEmployeesKeepingCar(agencyID,carID));
     }
 
-
+    private void updateAgency(AgencyEntity agencyEntity, AgencyTO agencyTO) {
+       agencyEntity.setAddress(Address.builder()
+               .street(agencyTO.getAddress().getStreet())
+               .city(agencyTO.getAddress().getCity())
+               .country(agencyTO.getAddress().getCountry())
+               .postalCode(agencyTO.getAddress().getPostalCode())
+               .contactNumber(agencyTO.getAddress().getContactNumber())
+               .build());
+    }
 }
