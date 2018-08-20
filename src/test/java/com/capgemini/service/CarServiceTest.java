@@ -278,4 +278,111 @@ public class CarServiceTest {
         Assert.assertEquals((Integer)0, (Integer)agencyDao.getRentalsToCount(savedAgency.getId()));
         Assert.assertEquals((Integer)0, (Integer)clientDao.getRentalsCount(savedClient.getId()));
     }
+
+    @Test
+    public void shouldFindCarsThatWasRentedByMoreThan10DistinctClients() {
+        //given
+        CarEntity car1 = testTo.getCarEntity();
+        CarEntity savedCar1 = carDao.save(car1);
+        CarEntity car2 = testTo.getCarEntity();
+        CarEntity savedCar2 = carDao.save(car2);
+        CarEntity car3 = testTo.getCarEntity();
+        CarEntity savedCar3 = carDao.save(car3);
+
+        AgencyEntity agency = testTo.getAgencyEntity();
+        AgencyEntity savedAgency = agencyDao.save(agency);
+
+        ClientEntity client1 = testTo.getClientEntity();
+        ClientEntity savedClient1 = clientDao.save(client1);
+        ClientEntity client2 = testTo.getClientEntity();
+        ClientEntity savedClient2 = clientDao.save(client2);
+        ClientEntity client3 = testTo.getClientEntity();
+        ClientEntity savedClient3 = clientDao.save(client3);
+        ClientEntity client4 = testTo.getClientEntity();
+        ClientEntity savedClient4 = clientDao.save(client4);
+        ClientEntity client5 = testTo.getClientEntity();
+        ClientEntity savedClient5 = clientDao.save(client5);
+        ClientEntity client6 = testTo.getClientEntity();
+        ClientEntity savedClient6 = clientDao.save(client6);
+
+
+        RentalEntity rentalEntity1 = testTo.getRentalEntity(savedAgency, savedCar1, savedClient1); //car1 - 6 rentals by different users
+        RentalEntity rentalEntity2 = testTo.getRentalEntity(savedAgency, savedCar1, savedClient2); // 8 rental overall
+        RentalEntity rentalEntity3 = testTo.getRentalEntity(savedAgency, savedCar1, savedClient3);
+        RentalEntity rentalEntity4 = testTo.getRentalEntity(savedAgency, savedCar1, savedClient4);
+        RentalEntity rentalEntity5 = testTo.getRentalEntity(savedAgency, savedCar1, savedClient5);
+        RentalEntity rentalEntity6 = testTo.getRentalEntity(savedAgency, savedCar1, savedClient6);
+        RentalEntity rentalEntity7 = testTo.getRentalEntity(savedAgency, savedCar1, savedClient5);
+        RentalEntity rentalEntity8 = testTo.getRentalEntity(savedAgency, savedCar1, savedClient6);
+
+        RentalEntity rentalEntity9 = testTo.getRentalEntity(savedAgency, savedCar2, savedClient1); //car2 - 5 rentals by different users
+        RentalEntity rentalEntity10 = testTo.getRentalEntity(savedAgency, savedCar2, savedClient2); // 8 rental overall
+        RentalEntity rentalEntity11 = testTo.getRentalEntity(savedAgency, savedCar2, savedClient3);
+        RentalEntity rentalEntity12 = testTo.getRentalEntity(savedAgency, savedCar2, savedClient4);
+        RentalEntity rentalEntity13 = testTo.getRentalEntity(savedAgency, savedCar2, savedClient5);
+        RentalEntity rentalEntity14 = testTo.getRentalEntity(savedAgency, savedCar2, savedClient3);
+        RentalEntity rentalEntity15 = testTo.getRentalEntity(savedAgency, savedCar2, savedClient4);
+        RentalEntity rentalEntity16 = testTo.getRentalEntity(savedAgency, savedCar2, savedClient5);
+
+        RentalEntity rentalEntity17 = testTo.getRentalEntity(savedAgency, savedCar3, savedClient1); //car2 - 4 rentals by different users
+        RentalEntity rentalEntity18 = testTo.getRentalEntity(savedAgency, savedCar3, savedClient2); // 4 rental overall
+        RentalEntity rentalEntity19 = testTo.getRentalEntity(savedAgency, savedCar3, savedClient3);
+        RentalEntity rentalEntity20 = testTo.getRentalEntity(savedAgency, savedCar3, savedClient4);
+
+        rentalDao.save(rentalEntity1);
+        rentalDao.save(rentalEntity2);
+        rentalDao.save(rentalEntity3);
+        rentalDao.save(rentalEntity4);
+        rentalDao.save(rentalEntity5);
+        rentalDao.save(rentalEntity6);
+        rentalDao.save(rentalEntity7);
+        rentalDao.save(rentalEntity8);
+        rentalDao.save(rentalEntity9);
+        rentalDao.save(rentalEntity10);
+        rentalDao.save(rentalEntity11);
+        rentalDao.save(rentalEntity12);
+        rentalDao.save(rentalEntity13);
+        rentalDao.save(rentalEntity14);
+        rentalDao.save(rentalEntity15);
+        rentalDao.save(rentalEntity16);
+        rentalDao.save(rentalEntity17);
+        rentalDao.save(rentalEntity18);
+        rentalDao.save(rentalEntity19);
+        rentalDao.save(rentalEntity20);
+
+        List<CarEntity> resultList_8 = carDao.findCarsRentedToDistinctClientsMoreThan(6L);
+        List<CarEntity> resultList_7 = carDao.findCarsRentedToDistinctClientsMoreThan(5L);
+        List<CarEntity> resultList_6 = carDao.findCarsRentedToDistinctClientsMoreThan(4L);
+        List<CarEntity> resultList_5 = carDao.findCarsRentedToDistinctClientsMoreThan(3L);
+
+        Assert.assertEquals((Integer)0, (Integer)resultList_8.size());
+        Assert.assertEquals((Integer)1, (Integer)resultList_7.size());
+        Assert.assertEquals((Integer)2, (Integer)resultList_6.size());
+        Assert.assertEquals((Integer)3, (Integer)resultList_5.size());
+    }
+
+    @Test
+    public void shouldFindCarsRentedInGivenTimePeriod() {
+        //given
+        CarEntity car1 = testTo.getCarEntity();
+        CarEntity savedCar1 = carDao.save(car1);
+        CarEntity car2 = testTo.getCarEntity();
+        CarEntity savedCar2 = carDao.save(car2);
+        CarEntity car3 = testTo.getCarEntity();
+        CarEntity savedCar3 = carDao.save(car3);
+        CarEntity car4 = testTo.getCarEntity();
+        CarEntity savedCar4 = carDao.save(car4);
+        CarEntity car5 = testTo.getCarEntity();
+        CarEntity savedCar5 = carDao.save(car5);
+
+        AgencyEntity agency = testTo.getAgencyEntity();
+        AgencyEntity savedAgency = agencyDao.save(agency);
+
+        RentalEntity rentalEntity1 = testTo.getRentalEntity(savedAgency, savedCar1, savedClient1);
+        RentalEntity rentalEntity2 = testTo.getRentalEntity(savedAgency, savedCar2, savedClient2);
+        RentalEntity rentalEntity3 = testTo.getRentalEntity(savedAgency, savedCar3, savedClient3);
+        RentalEntity rentalEntity4 = testTo.getRentalEntity(savedAgency, savedCar4, savedClient4);
+        RentalEntity rentalEntity5 = testTo.getRentalEntity(savedAgency, savedCar5, savedClient5);
+
+    }
 }
